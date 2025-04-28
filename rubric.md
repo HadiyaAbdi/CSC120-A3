@@ -16,7 +16,7 @@ __YES___ 1 pt: `reflection.md` lists the classmates you consulted & TA hours att
 
 ___YES__ 1 pt: Program queries user for number of conversation rounds
 
-__Part___ 1 pt: Program carries out requested number of conversation rounds
+__Yes___ 1 pt: Program carries out requested number of conversation rounds
 
 __Yes___ 1 pt: Allocates static array of canned responses
 
@@ -40,9 +40,9 @@ __Yes___ 1 pt: Prints transcript when terminating
 
 ___Yes__ (Kudos!) Handles mirror words with punctuation
 
-___Part__ (Kudos!) Generates output with correct punctuation & capitalization
+___Yes__ (Kudos!) Generates output with correct punctuation & capitalization
 
-__Part___ (Kudos!) Handles you --> me/I dilemma
+__Yes___ (Kudos!) Handles you --> me/I dilemma
 
 
 

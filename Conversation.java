@@ -2,157 +2,100 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
 
-// this class mirrors a conversation between a user and chatbot. it takes rounds, mirros pronouns, replies to the user, and print a trancript.
+// this class mirrors a conversation between a user and chatbot. it takes rounds, mirrors pronouns, replies to the user, and prints a transcript.
 class Conversation implements Chatbot {
-  //stores conversation between the bot and the user
   private ArrayList<String> transcript = new ArrayList<>();
-  private static final String[] repeat = {"Tell me more.", "Intresting", "Sounds Thrilling!", "Why do you say that?", "Mhmm"};
-  
-
-
-
-
-  // Attributes 
-
-  /**
-   * Constructor 
-   */
-
-   
+  private static final String[] repeat = {"Tell me more.", "Interesting.", "Sounds thrilling!", "Why do you say that?", "Mhmm."};
+  // constructor to initialize the chatbot
   public Conversation() {
-   
-    System.out.println("Welcome to the chatpot");
-    
-
+    System.out.println("Welcome to the chatbot!");
   }
-
-  // take in the number of rounds a user want to play
-  /**
-   * 
-   */
-  //public static int rounds(){
-
-   // Scanner scanner = new Scanner(System.in);
-    //System.out.println("how many rounds?");
-    //int n = scanner.nextInt();
-    //scanner.close();
-   
-    //System.out.println("Hello, Welcome");
-     // System.out.println("What is on your mind?");
-      //for(int i = 0; i < n; i++){
- // }
-
-  /**
-   * Starts and runs the conversation with the user
-   */
+  // overridden chat to handle the flow of the conversation 
+  @Override
   public void chat() {
     Scanner scanner = new Scanner(System.in);
-    System.out.println("how many rounds?");
+    // ask for number of rounds
+    System.out.println("How many rounds?");
     int n = scanner.nextInt();
     scanner.nextLine(); 
-  
-    System.out.println("Hello, Welcome");
+    
+    //Greet & ask question
+    System.out.println("Hello, welcome!");
     System.out.println("What is on your mind?");
-    String user = scanner.nextLine(); //initial user input
+    String user = scanner.nextLine(); // initial user input
 
+    // add initial user input to transcript
     transcript.add("What is on your mind?");
     transcript.add(user);
 
+    // main conversation loop
+    for (int i = 0; i < n; i++) {
+      user = user.toLowerCase(); // not modifying yet
 
-    for(int i = 0; i < n; i++){ //everytime the forloops runs the trascript adds user input
-      user = user.toLowerCase(); //converts the input to lower case
+      // check if user input contains any pronouns
+      if (user.contains("i") || user.contains("me") || user.contains("you") || user.contains("my") || user.contains("your")) {
+        String mirror = respond(user);
+        System.out.println(mirror);
+        transcript.add(mirror);
+      }else { // if no pronouns are found
+        // randomly select a response from the repeat array
+        int chat = new Random().nextInt(repeat.length);
+        String reset = repeat[chat];
+        System.out.println(reset);
+        transcript.add(reset);
+      }
 
-      if(user.contains("i") || user.contains("me") || user.contains("you") || user. contains("my") || user.contains("your"))// looks at the first person pronouns and ignores
-      {// have to mirror words from this point
-        String[] mirror = user.split(" ");
-
-        for(int j = 0; j < mirror.length; j++){
-          if(mirror[i].equals("i") || mirror[j].contains("i'm") || mirror[j].contains("i am")){
-            mirror[j] = "you"; // replace i or i'm with you
-            mirror[j + 1] = "are";
-          }
-          else if (mirror[j].equals("me")){
-            mirror[j] = "you"; //replace me with you
-          }
-          else if (mirror[j].equals("you")){
-            mirror[j] = "i"; //replace you with i 
-          }
-          else if(mirror[j].equals("my")){
-            mirror[j] = "your"; // replace my with your 
-          }}
-
-          String botResponse = String.join(" ", mirror);
-          System.out.println(botResponse); //mirrored response
-          
-          // pick a random phrase from the array: repeat
-          int chats = new Random().nextInt(repeat.length);
-          String reset = repeat[chats];
-          System.out.println(reset);
-          transcript.add(reset);
-
-          user = scanner.nextLine();
-          transcript.add(user);
-        } // space for the response
-        else{
-          if( i!= n - 1){// if not last round, keep the conversation going by randomising 
-            int chats = new Random().nextInt(repeat.length);
-            String reset = repeat[chats];
-            System.out.println(reset);
-            transcript.add(reset); //add random response
-
-            // ask for user input again 
-            user = scanner.nextLine();
-            transcript.add(user);
-        } else{
-          System.out.println("Mmmm-hm, see ya!");
-          transcript.add("Mmmm-hm, see ya!");
-
-        }}
-        //check if the user responds with personal pronouns
-          // if(user.equalsIgnoreCase("why do you say that")){
-            //  user = scanner.nextLine();
-             // transcript.add(user);
-            
-
-            //if the user doesnt use personal pronouns
-            if(!user.contains("i") && !user.contains("me") && !user.contains("you") && !user.contains("my") && !user.contains("your")){
-              System.out.println("Mmmm-hm, see ya!");
-             transcript.add("Mmmm-hm, see ya!");
-              
-            }
-
-      }}
-        
+      // new input from the user
+        user = scanner.nextLine();
+        transcript.add(user);
       
-    
-  /**
-   * Prints transcript of conversation
-   */
+    }
+    // end of conversation
+    System.out.println("Mmmm-hm, see ya!");
+    transcript.add("Mmmm-hm, see ya!");
+  }
+
+  // overridden respond to handle the mirroring of pronouns
+  @Override
+  public String respond(String inputString) {
+    String[] word = inputString.split(" ");
+    for (int i = 0; i < word.length; i++) {
+      switch (word[i]) {
+        case "i":
+          word[i] = "you";
+          break;
+        case "me":
+          word[i] = "you";
+          break;
+        case "my":
+          word[i] = "your";
+          break;
+        case "am":
+          word[i] = "are";
+          break;
+        case "you":
+          word[i] = "I";
+          break;
+        case "your":
+          word[i] = "my";
+          break;
+      }
+    }
+    return String.join(" ", word) + "?";
+  }
+  // overridden printTranscript to print the conversation transcript
+  @Override
   public void printTranscript() {
     System.out.println("Transcript:");
-    //iterates the transcript
-    for(String tra : transcript){
-      System.out.println(tra);
+    for (String line : transcript) {
+        System.out.println(line);
     }
+}
 
-  }
-
-  /**
-   * Gives appropriate response (mirrored or canned) to user input
-   * @param inputString the users last line of input
-   * @return mirrored or canned response to user input  
-   */
-  public String respond(String inputString) {
-    String returnString = ""; 
-    return returnString; 
-  }
-
+  // main method to run the chatbot
   public static void main(String[] arguments) {
-
     Conversation myConversation = new Conversation();
     myConversation.chat();
     myConversation.printTranscript();
-
-  }}
-  
-
+  }
+}
